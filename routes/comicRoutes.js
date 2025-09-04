@@ -11,7 +11,7 @@ router.get("/comics", async (req, res) => {
     const limit = 100;
     let queries = "";
 
-    if (req.query.name) {
+    if (req.query.title) {
       queries = queries + "&title=" + req.query.title;
     }
 
