@@ -12,7 +12,7 @@ router.get("/comics", async (req, res) => {
     let queries = "";
 
     if (req.query.name) {
-      queries = queries + "&title=" + req.query.name;
+      queries = queries + "&title=" + req.query.title;
     }
 
     if (req.query.page) {
