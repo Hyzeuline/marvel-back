@@ -5,18 +5,27 @@ const axios = require("axios");
 const API_MARVEL = "https://lereacteur-marvel-api.herokuapp.com";
 
 // Get a list of characters
+
 router.get("/characters", async (req, res) => {
   try {
-    const { limit, skip, name } = req.query;
-    const response = await axios.get(`${API_MARVEL}/characters`, {
-      params: { apiKey: process.env.SECRET_API_KEY, limit, skip, name },
-    });
-    return res.status(201).json(response.data);
+    const limit = 100;
+    let queries = "";
+    if (req.query.name) {
+      queries = queries + "&name=" + req.query.name;
+    }
+
+    if (req.query.page) {
+      let skip = (req.query.page - 1) * limit;
+      queries = queries + "&skip=" + skip;
+    }
+    const response = await axios.get(
+      `${API_MARVEL}/characters?apiKey=${process.env.SECRET_API_KEY}${queries}`
+    );
+    return res.status(200).json(response.data);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
-
 // test postman {
 //     "count": 1493,
 //     "limit": 100,
