@@ -10,6 +10,7 @@ router.get("/characters", async (req, res) => {
   try {
     const limit = 100;
     let queries = "";
+
     if (req.query.name) {
       queries = queries + "&name=" + req.query.name;
     }
