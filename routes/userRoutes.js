@@ -7,6 +7,7 @@ const encBase64 = require("crypto-js/enc-base64");
 
 router.post("/user/signup", async (req, res) => {
   try {
+    console.log("User body:", req.body);
     //je vérifie que mon email n'existe pas
     const verifEmail = await User.findOne({ email: req.body.email });
     //console.log(verifEmail);
@@ -26,8 +27,7 @@ router.post("/user/signup", async (req, res) => {
     // je crypte mon mdp avant de l'ajouter dans ma db
     const salt = uid(24);
     const saltedPassword = req.body.password + salt;
-    const cryptedPassword = SHA256(saltedPassword);
-    const hash = encBase64.stringify(cryptedPassword);
+    const hash = SHA256(saltedPassword).toString(encBase64);
     const token = uid(32);
 
     const newUser = new User({
