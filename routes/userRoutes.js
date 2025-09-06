@@ -16,12 +16,7 @@ router.post("/user/signup", async (req, res) => {
         .json({ message: "This email does already exist !" });
     }
     //je vérifie que les paramètres sont inscrits
-    if (
-      !req.body.username ||
-      !req.body.email ||
-      !req.body.password ||
-      req.body.newsletter === undefined
-    ) {
+    if (!req.body.username || !req.body.email || !req.body.password) {
       return res.status(400).json({ message: "Missing parameters !" });
     }
 
