@@ -1,7 +1,12 @@
 require("dotenv").config();
 const express = require("express"); // import du package express
 const cors = require("cors");
-require("dotenv").config();
+const mongoose = require("mongoose");
+
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to Marvel base"))
+  .catch(err => console.error(err));
 
 const app = express(); // création du serveur
 app.use(cors());
@@ -16,6 +21,9 @@ app.use(comicRoutes);
 
 const characterRoutes = require("./routes/characterRoutes");
 app.use(characterRoutes);
+
+const userRoutes = require("./routes/userRoutes");
+app.use(userRoutes);
 
 app.all(/.*/, (req, res) => {
   return res.status(404).json("Not found");
