@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express"); // import du package express
 const cors = require("cors");
 const mongoose = require("mongoose");
-const cloudinary = require("cloudinary").v2;
 const cookieParser = require("cookie-parser");
 
 mongoose
@@ -10,22 +9,15 @@ mongoose
   .then(() => console.log("Connected to Marvel base"))
   .catch(err => console.error(err));
 
-cloudinary.config({
-  //je connecte mon drive à mon fichier
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
-});
-
 const app = express(); // création du serveur
 app.use(
   cors({
-    origin: "http://localhost:5173", // <-- ton front-end
-    credentials: true, // <-- obligatoire pour envoyer les cookies
+    origin: "https://bespoke-klepon-babdc2.netlify.app/characters",
+    credentials: true,
   })
 );
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "Bienvenue sur le site de Marvel" });
