@@ -47,8 +47,8 @@ router.post("/user/signup", async (req, res) => {
     // ENVOI DU COOKIE HTTP-ONLY
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // false en dev, true en prod avec HTTPS
-      sameSite: "lax", // ou "none" si front et back sur domaines différents
+      secure: true, // false en dev, true en prod avec HTTPS
+      sameSite: "none", // ou "none" si front et back sur domaines différents
       maxAge: 1000 * 60 * 60 * 24, // 1 jour
     });
 
