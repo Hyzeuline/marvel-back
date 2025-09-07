@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Favorite = require("../models/Favorite");
-const cloudinary = require("cloudinary").v2;
-const fileUpload = require("express-fileupload");
 const isAuthenticated = require("../middleware/isAuthenticated");
 
 // Ajouter un favori
-router.post("/favorite", isAuthenticated, fileUpload(), async (req, res) => {
+router.post("/favorite", isAuthenticated, async (req, res) => {
   try {
-    const { title, description, itemType, itemId } = req.body;
+    const { title, description, itemType, itemId, image } = req.body;
+
+    console.log("Cookies reçus :", req.cookies);
+    console.log("Body :", req.body);
 
     // Empêcher les doublons
     const existing = await Favorite.findOne({
@@ -26,23 +27,8 @@ router.post("/favorite", isAuthenticated, fileUpload(), async (req, res) => {
       itemType,
       itemId,
       user: req.user._id,
+      image, // prend directement l'image envoyée par le front
     });
-
-    // Gestion image si présente
-    if (req.files?.picture) {
-      const convertToBase64 = file =>
-        `data:${file.mimetype};base64,${file.data.toString("base64")}`;
-
-      const uploadResponse = await cloudinary.uploader.upload(
-        convertToBase64(req.files.picture),
-        { folder: `marvel/favorites/${req.user._id}` }
-      );
-
-      newFavorite.image = {
-        url: uploadResponse.secure_url,
-        public_id: uploadResponse.public_id,
-      };
-    }
 
     await newFavorite.save();
     return res.status(201).json(newFavorite);
@@ -66,16 +52,11 @@ router.delete("/favorite/:id", isAuthenticated, async (req, res) => {
   try {
     const favorite = await Favorite.findOneAndDelete({
       _id: req.params.id,
-      user: req.user._id, // sécurité : il ne supprime que ses favoris
+      user: req.user._id,
     });
 
     if (!favorite) {
       return res.status(404).json({ message: "Favori introuvable" });
-    }
-
-    // Si le favori avait une image stockée dans Cloudinary, on la supprime
-    if (favorite.image?.public_id) {
-      await cloudinary.uploader.destroy(favorite.image.public_id);
     }
 
     return res.status(200).json({ message: "Favori supprimé" });
