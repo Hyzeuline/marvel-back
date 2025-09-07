@@ -10,12 +10,7 @@ mongoose
   .catch(err => console.error(err));
 
 const app = express(); // création du serveur
-app.use(
-  cors({
-    origin: "https://bespoke-klepon-babdc2.netlify.app",
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
