@@ -43,6 +43,15 @@ router.post("/user/signup", async (req, res) => {
     //console.log(newUser);
     //j'enregistre mon nouvel utilisateur
     await newUser.save();
+
+    // ENVOI DU COOKIE HTTP-ONLY
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // false en dev, true en prod avec HTTPS
+      sameSite: "lax", // ou "none" si front et back sur domaines différents
+      maxAge: 1000 * 60 * 60 * 24, // 1 jour
+    });
+
     //je crée un nouveau schéma de réponse que je veux renvoyer
     const userDetails = {
       _id: newUser._id,
