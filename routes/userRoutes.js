@@ -81,8 +81,8 @@ router.post("/user/login", async (req, res) => {
     // ENVOI DU COOKIE HTTP-ONLY
     res.cookie("token", existUser.token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24,
     });
 
