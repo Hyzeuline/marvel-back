@@ -31,8 +31,10 @@ router.post("/user/signup", async (req, res) => {
     const token = uid(32);
 
     const newUser = new User({
-      username: req.body.username,
       email: req.body.email,
+      account: {
+        username: req.body.username,
+      },
       token,
       hash,
       salt,
@@ -45,11 +47,10 @@ router.post("/user/signup", async (req, res) => {
     const userDetails = {
       _id: newUser._id,
       token: newUser.token,
-      username: newUser.username,
+      account: { username: newUser.account.username },
     };
     return res.status(201).json(userDetails);
   } catch (error) {
-    console.log("🔥 Erreur signup:", error);
     return res.status(500).json({ message: error.message });
   }
 });
@@ -70,7 +71,7 @@ router.post("/user/login", async (req, res) => {
     const userDetails = {
       _id: existUser._id,
       token: existUser.token,
-      username: existUser.username,
+      account: { username: existUser.account.username },
     };
     return res.status(200).json({ userDetails });
   } catch (error) {
