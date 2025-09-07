@@ -77,6 +77,15 @@ router.post("/user/login", async (req, res) => {
     if (newHash !== userHash) {
       return res.status(401).json({ message: "Password or email not valid !" });
     }
+
+    // ENVOI DU COOKIE HTTP-ONLY
+    res.cookie("token", existUser.token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
     const userDetails = {
       _id: existUser._id,
       token: existUser.token,
