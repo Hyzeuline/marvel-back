@@ -12,7 +12,7 @@ mongoose
 const app = express(); // création du serveur
 app.use(
   cors({
-    origin: "https://bespoke-klepon-babdc2.netlify.app/characters",
+    origin: "https://bespoke-klepon-babdc2.netlify.app",
     credentials: true,
   })
 );
