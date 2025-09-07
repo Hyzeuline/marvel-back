@@ -3,6 +3,7 @@ const express = require("express"); // import du package express
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
+const cookieParser = require("cookie-parser");
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -17,8 +18,14 @@ cloudinary.config({
 });
 
 const app = express(); // création du serveur
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // <-- ton front-end
+    credentials: true, // <-- obligatoire pour envoyer les cookies
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.json({ message: "Bienvenue sur le site de Marvel" });
