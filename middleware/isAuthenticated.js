@@ -5,6 +5,7 @@ const isAuthenticated = async (req, res, next) => {
   try {
     // Lire le token depuis le cookie
     const token = req.cookies?.token;
+    console.log(token);
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorized: token manquant" });
